@@ -1,8 +1,18 @@
-var alFranken = 'https://raw.githubusercontent.com/philiprlarie/reading/master/al-franken-giant-of-the-senate.json';
-var bFrank = 'https://raw.githubusercontent.com/philiprlarie/reading/master/benjamin-franklin.json';
-var marceloGleiser = 'https://raw.githubusercontent.com/philiprlarie/reading/master/island-of-knowledge.json';
-
-var urls = [alFranken, bFrank, marceloGleiser];
+var urls = [
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/al-franken-giant-of-the-senate.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/algorithms-to-live-by.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/an-illustrated-book-of-bad-arguments.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/benjamin-franklin.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/cant-we-talk-about-something-more-pleasant.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/emotional-intelligence-2.0.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/how-to-win-friends-and-influence-people.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/island-of-knowledge.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/random-words.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/the-alchemist.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/the-gifts-of-imperfection.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/the-march.json',
+  'https://raw.githubusercontent.com/philiprlarie/reading/master/the-stranger.json'
+];
 var words = [];
 
 function getWords(urls) {
@@ -17,6 +27,7 @@ function getWords(urls) {
       if (requestsCompleted === urls.length) {
         populateDOMWithWordFields(getNextWord());
       }
+      console.log(json.title);
       console.log(words);
     });
   });
