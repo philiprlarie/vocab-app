@@ -1,0 +1,16 @@
+body {
+  background: white;
+  color: black;
+  font-family: Helvetica, sans-serif;
+  /*text-align: center;*/
+}
+.main {
+  /*width: 50%;*/
+  text-align: center;
+  padding: 20px;
+  margin: 0 auto;
+  /*text-align: left;*/
+}
+span {
+  font-weight: bolder;
+}
