@@ -14,6 +14,8 @@ var urls = [
   'https://raw.githubusercontent.com/philiprlarie/reading/master/the-stranger.json'
 ];
 var words = [];
+var weightedArr = [];
+var showingFront = true;
 
 function getWords(urls) {
   // urls for JSON
@@ -25,47 +27,112 @@ function getWords(urls) {
         words = words.concat(json.vocabulary);
       }
       if (requestsCompleted === urls.length) {
+        generateWeightedArray();
         populateDOMWithWordFields(getNextWord());
       }
-      console.log(json.title);
       console.log(words);
     });
   });
 
 }
 
-
 function getNextWord() {
-  console.log('in next word');
-  console.log(words);
-  var randIndex = Math.floor(Math.random() * words.length);
-  return words[randIndex];
+  return sampleWordsWeighted();
+}
+
+function generateWeightedArray() {
+  var rangeStart = 0;
+  var rangeEnd;
+  words.forEach(function(word) {
+    rangeEnd = rangeStart + (1.0 / word.rank);
+    weightedArr.push({
+      start: rangeStart,
+      end: rangeEnd
+    });
+    rangeStart = rangeEnd;
+  });
+}
+
+function sampleWordsWeighted() {
+  var lastRangeEnd = weightedArr[weightedArr.length - 1].end;
+  var randNum = Math.random() * lastRangeEnd;
+
+  var wordIndex = binarySearch(weightedArr, randNum);
+  return words[wordIndex];
+}
+
+function binarySearch(arr, target) {
+  var low = 0;
+  var high = arr.length - 1;
+  while (low <= high) {
+    var mid = Math.floor((low + high) / 2);
+    if (target >= arr[mid].start && target <= arr[mid].end) {
+      return mid;
+    } else if (arr[mid].start > target) {
+      high = mid - 1;
+    } else if  (arr[mid].end < target) {
+      low = mid + 1;
+    }
+  }
+  return -1;
 }
 
 function onNextClick() {
-  console.log('in on nextclick');
   var nextWord = getNextWord();
-  console.log(nextWord);
   populateDOMWithWordFields(nextWord);
+  // when hitting next, we always want to be showing the front of the card
+  if (!showingFront) {
+    flipCard();
+  }
+}
+
+function formatUsage(usageStr) {
+  var htmlStr = '';
+  // match all occurrences of **any chars**
+  var re = /(\*\*)(.*?)(\*\*)/g;
+  htmlStr = usageStr.replace(re, '<strong>$2</strong>');
+  return htmlStr;
+}
+
+function formatOrigin(originStr) {
+  var htmlStr = '';
+  // match all occurences of _any chars_
+  var re = /(_)(.*?)(_)/g;
+  htmlStr = originStr.replace(re, '<em>$2</em>');
+  return htmlStr;
 }
 
 function populateDOMWithWordFields(word) {
-  $('#word').html('<span>Word:</span> ' + word.word);
+  $('#word').html(word.word);
   if (word.hasOwnProperty('pronunciation')) {
     $('#pronunciation').html('<span>Pronunciation: </span>' + word.pronunciation);
     $('#pronunciation').css('display', 'block');
   } else {
     $('#pronunciation').css('display', 'none');
   }
-  $('#definition').html('<span>Definition: </span>' + word.definition);
-  $('#usage').html('<span>Usage: </span>'  + word.usage);
-  $('#origin').html('<span>Origin: </span>'  + word.origin);
+  $('#definition').html(word.definition);
+  $('#usage').html('<span>Usage: </span>'  + formatUsage(word.usage));
+  $('#origin').html('<span>Origin: </span>'  + formatOrigin(word.origin));
   $('#rank').html('<span>Rank: </span>'  + word.rank);
+}
 
+function flipCard() {
+  var $backOfCard = $('#card-back')[0];
+  var $frontOfCard = $('#card-front')[0];
+  showingFront = !showingFront;
+
+  if (!showingFront) {
+    $frontOfCard.style.display = 'none';
+    $backOfCard.style.display = 'flex';
+  } else {
+    $frontOfCard.style.display = 'flex';
+    $backOfCard.style.display = 'none';
+  }
 }
 
 $(document).ready(function() {
   // register button click handler
   getWords(urls);
   $('#next').click(onNextClick);
+  $('#flash-card').click(flipCard);
 });
