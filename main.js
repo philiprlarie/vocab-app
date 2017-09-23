@@ -30,7 +30,6 @@ function getWords(urls) {
         generateWeightedArray();
         populateDOMWithWordFields(getNextWord());
       }
-      console.log(words);
     });
   });
 
