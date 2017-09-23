@@ -3,20 +3,24 @@
   <head>
     <title>Phil's Vocab App</title>
     <link rel="stylesheet" type="text/css" href="styles.css"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="main.js"></script>
   </head>
   <body>
     <div class="main">
-      <h1>Phil's Vocab App</h1>
-      <p id="word">Word</p>
-      <p id="pronunciation" style="display:none;">(pronunciation)?</p>
-      <p id="definition">Definition:</p>
-      <p id="usage">Usage: </p>
-      <p id="origin">Origin: </p>
-      <p id="rank">Rank: </p>
+      <section id="flash-card">
+        <section id="card-front">
+          <p id="word">Word</p>
+          <p id="rank">Rank: </p>
+        </section>
+        <section id="card-back">
+          <p id="pronunciation" style="display:none;">(pronunciation)?</p>
+          <p id="definition">Definition:</p>
+          <p id="usage">Usage: </p>
+          <p id="origin">Origin: </p>
+        </section>
+      </section>
       <button id="next">Next</button>
     </div>
   </body>
